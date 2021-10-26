@@ -6,6 +6,12 @@ body {
   background: linear-gradient(#43bbf7, #c6ced1);
 }
 
+footer {
+  text-align: center;
+  font-family: "Fira Sans", sans-serif;
+  font-size: 12px;
+}
+
 h1 {
   font-size: 30px;
   font-style: italic;
