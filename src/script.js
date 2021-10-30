@@ -55,8 +55,6 @@ function showTemperature(response) {
   heading.innerHTML = message;
 
   let temperature = Math.round(response.data.main.temp);
-  console.log(temperature);
-  console.log(response.data);
   let temperatureToday = document.querySelector("#temperature-today");
   temperatureToday.innerHTML = `${temperature}°C`;
   let descriptionToday = document.querySelector("#description-today");
