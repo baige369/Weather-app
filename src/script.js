@@ -54,6 +54,11 @@ function showTemperature(response) {
   let message = `Weather forecast for ${response.data.name}`;
   heading.innerHTML = message;
 
+  let primaryImage = document.querySelector("#primary-image");
+  primaryImage.setAttribute(
+    "src",
+    `images/${response.data.weather[0].icon}.jpg`
+  );
   let temperature = Math.round(response.data.main.temp);
   let temperatureToday = document.querySelector("#temperature-today");
   temperatureToday.innerHTML = `${temperature}°C`;
