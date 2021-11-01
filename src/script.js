@@ -59,6 +59,7 @@ function showTemperature(response) {
     "src",
     `images/${response.data.weather[0].icon}.jpg`
   );
+  celsiusTemperature = response.data.main.temp;
   let temperature = Math.round(response.data.main.temp);
   let temperatureToday = document.querySelector("#temperature-today");
   temperatureToday.innerHTML = `${temperature}°C`;
@@ -90,24 +91,10 @@ function handleSubmit(event) {
 let searchForm = document.querySelector("#search-form");
 searchForm.addEventListener("submit", handleSubmit);
 
-let temperature1day = document.querySelector("#temp-1day");
-temperature1day.innerHTML = "20°C|13°C";
-
-let temperature2day = document.querySelector("#temp-2day");
-temperature2day.innerHTML = "20°C|13°C";
-
-let temperature3day = document.querySelector("#temp-3day");
-temperature3day.innerHTML = "20°C|13°C";
-
-let temperature4day = document.querySelector("#temp-4day");
-temperature4day.innerHTML = "20°C|13°C";
-
-let temperature5day = document.querySelector("#temp-5day");
-temperature5day.innerHTML = "20°C|13°C";
-
 function changeTempToFahrenheit() {
   let temperatureToday = document.querySelector("#temperature-today");
-  temperatureToday.innerHTML = "68°F";
+  let fahrenheitCalculation = Math.round((celsiusTemperature * 9) / 5 + 32);
+  temperatureToday.innerHTML = fahrenheitCalculation + "°F";
 
   let temperature1day = document.querySelector("#temp-1day");
   temperature1day.innerHTML = "68°F|55°F";
@@ -130,7 +117,7 @@ fahrenheitButton.addEventListener("click", changeTempToFahrenheit);
 
 function changeTemptoCelsius() {
   let temperatureToday = document.querySelector("#temperature-today");
-  temperatureToday.innerHTML = "20°C";
+  temperatureToday.innerHTML = Math.round(celsiusTemperature) + "°C";
 
   let temperature1day = document.querySelector("#temp-1day");
   temperature1day.innerHTML = "20°C|13°C";
@@ -169,4 +156,5 @@ function findMe(event) {
 let findButton = document.querySelector("#find-me");
 findButton.addEventListener("click", findMe);
 
+let celsiusTemperature = null;
 searchCity("London");
