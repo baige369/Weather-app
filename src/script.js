@@ -14,7 +14,7 @@ console.log(now);
 let day = days[now.getDay()];
 console.log(day);
 
-let date = now.getDate();
+let date = twoDigits(now.getDate());
 console.log(date);
 
 function twoDigits(n) {
