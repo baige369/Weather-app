@@ -59,7 +59,7 @@ function showTemperature(response) {
     "src",
     `images/${response.data.weather[0].icon}.jpg`
   );
-  celsiusTemperature = response.data.main.temp;
+  celsiusTemperature = Math.round(response.data.main.temp);
   let temperature = Math.round(response.data.main.temp);
   let temperatureToday = document.querySelector("#temperature-today");
   temperatureToday.innerHTML = `${temperature}°C`;
@@ -117,7 +117,7 @@ fahrenheitButton.addEventListener("click", changeTempToFahrenheit);
 
 function changeTemptoCelsius() {
   let temperatureToday = document.querySelector("#temperature-today");
-  temperatureToday.innerHTML = Math.round(celsiusTemperature) + "°C";
+  temperatureToday.innerHTML = celsiusTemperature + "°C";
 
   let temperature1day = document.querySelector("#temp-1day");
   temperature1day.innerHTML = "20°C|13°C";
