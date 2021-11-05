@@ -49,6 +49,66 @@ dateButton.innerHTML = fullDate;
 let hourButton = document.querySelector("#hour-button");
 hourButton.innerHTML = time;
 
+function formatDay(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let day = date.getDay();
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  return days[day];
+}
+
+function dateOrdinal(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let dayofMonth = date.getDate();
+  if (dayofMonth == 31 || dayofMonth == 21 || dayofMonth == 1)
+    return dayofMonth + "st";
+  else if (dayofMonth == 22 || dayofMonth == 2) return dayofMonth + "nd";
+  else if (dayofMonth == 23 || dayofMonth == 3) return dayofMonth + "rd";
+  else return dayofMonth + "th";
+}
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function displayForecast(response) {
+  let forecast = response.data.daily;
+  let forecastElement = document.querySelector("#forecast");
+  let forecastHTML = `<div class="row">`;
+
+  forecast.forEach(function (forecastDay, index) {
+    if (index != 0 && index < 6) {
+      forecastHTML =
+        forecastHTML +
+        `
+    <div class="col next-days">
+      <div class="date">${
+        formatDay(forecastDay.dt) + " " + dateOrdinal(forecastDay.dt)
+      }</div>
+      <img class="secondary-image" src=images/${
+        forecastDay.weather[0].icon
+      }.jpg width=50%/>
+      <div class="temperature" id="temp-1day">${Math.round(
+        forecastDay.temp.max
+      )}°C|${Math.round(forecastDay.temp.min)}°C</div>
+      <div class="description">${capitalizeFirstLetter(
+        forecastDay.weather[0].description
+      )}</div>
+      </div>
+    `;
+    }
+  });
+  forecastHTML = forecastHTML + `</div>`;
+  forecastElement.innerHTML = forecastHTML;
+}
+
+function getForecast(coordinates) {
+  console.log(coordinates);
+  let apiKey = "a2dda52dce059eb8a14e95aaa0db6ab7";
+  let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=metric`;
+  console.log(apiUrl);
+  axios.get(apiUrl).then(displayForecast);
+}
+
 function showTemperature(response) {
   let heading = document.querySelector("h1");
   let message = `Weather forecast for ${response.data.name}`;
@@ -72,6 +132,7 @@ function showTemperature(response) {
   windSpeed.innerHTML = Math.round(response.data.wind.speed * 2.237);
   let feelsLike = document.querySelector("#feels-like");
   feelsLike.innerHTML = Math.round(response.data.main.feels_like);
+  getForecast(response.data.coord);
 }
 
 function searchCity(city) {
@@ -158,3 +219,6 @@ findButton.addEventListener("click", findMe);
 
 let celsiusTemperature = null;
 searchCity("London");
+
+//weather forecast
+//unit conversion
