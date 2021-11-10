@@ -76,6 +76,8 @@ function displayForecast(response) {
   let forecastHTML = `<div class="row">`;
 
   forecast.forEach(function (forecastDay, index) {
+    forecastTempMaxC = Math.round(forecastDay.temp.max);
+    forecastTempMinC = Math.round(forecastDay.temp.min);
     if (index != 0 && index < 6) {
       forecastHTML =
         forecastHTML +
@@ -87,9 +89,11 @@ function displayForecast(response) {
       <img class="secondary-image" src=images/${
         forecastDay.weather[0].icon
       }.jpg width=50%/>
-      <div class="temperature" id="temp-1day">${Math.round(
+      <div class="temperature"><span id="forecast-temp-max">${Math.round(
         forecastDay.temp.max
-      )}°C|${Math.round(forecastDay.temp.min)}°C</div>
+      )}</span>°C|<span id="forecast-temp-min">${Math.round(
+          forecastDay.temp.min
+        )}</span>°C</div>
       <div class="description">${capitalizeFirstLetter(
         forecastDay.weather[0].description
       )}</div>
@@ -102,7 +106,6 @@ function displayForecast(response) {
 }
 
 function getForecast(coordinates) {
-  console.log(coordinates);
   let apiKey = "a2dda52dce059eb8a14e95aaa0db6ab7";
   let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=metric`;
   console.log(apiUrl);
@@ -119,7 +122,7 @@ function showTemperature(response) {
     "src",
     `images/${response.data.weather[0].icon}.jpg`
   );
-  celsiusTemperature = Math.round(response.data.main.temp);
+  celsiusTemperature = response.data.main.temp;
   let temperature = Math.round(response.data.main.temp);
   let temperatureToday = document.querySelector("#temperature-today");
   temperatureToday.innerHTML = `${temperature}°C`;
@@ -131,7 +134,8 @@ function showTemperature(response) {
   let windSpeed = document.querySelector("#wind-speed");
   windSpeed.innerHTML = Math.round(response.data.wind.speed * 2.237);
   let feelsLike = document.querySelector("#feels-like");
-  feelsLike.innerHTML = Math.round(response.data.main.feels_like);
+  feel = response.data.main.feels_like;
+  feelsLike.innerHTML = Math.round(feel) + "°C";
   getForecast(response.data.coord);
 }
 
@@ -157,20 +161,9 @@ function changeTempToFahrenheit() {
   let fahrenheitCalculation = Math.round((celsiusTemperature * 9) / 5 + 32);
   temperatureToday.innerHTML = fahrenheitCalculation + "°F";
 
-  let temperature1day = document.querySelector("#temp-1day");
-  temperature1day.innerHTML = "68°F|55°F";
-
-  let temperature2day = document.querySelector("#temp-2day");
-  temperature2day.innerHTML = "68°F|55°F";
-
-  let temperature3day = document.querySelector("#temp-3day");
-  temperature3day.innerHTML = "68°F|55°F";
-
-  let temperature4day = document.querySelector("#temp-4day");
-  temperature4day.innerHTML = "68°F|55°F";
-
-  let temperature5day = document.querySelector("#temp-5day");
-  temperature5day.innerHTML = "68°F|55°F";
+  let feelsLike = document.querySelector("#feels-like");
+  let feelsLikeF = Math.round((feel * 9) / 5 + 32);
+  feelsLike.innerHTML = feelsLikeF + "°F";
 }
 
 let fahrenheitButton = document.querySelector("#Fahrenheit-button");
@@ -178,23 +171,14 @@ fahrenheitButton.addEventListener("click", changeTempToFahrenheit);
 
 function changeTemptoCelsius() {
   let temperatureToday = document.querySelector("#temperature-today");
-  temperatureToday.innerHTML = celsiusTemperature + "°C";
+  let celciusCalculation = Math.round(celsiusTemperature);
+  temperatureToday.innerHTML = celciusCalculation + "°C";
 
-  let temperature1day = document.querySelector("#temp-1day");
-  temperature1day.innerHTML = "20°C|13°C";
-
-  let temperature2day = document.querySelector("#temp-2day");
-  temperature2day.innerHTML = "20°C|13°C";
-
-  let temperature3day = document.querySelector("#temp-3day");
-  temperature3day.innerHTML = "20°C|13°C";
-
-  let temperature4day = document.querySelector("#temp-4day");
-  temperature4day.innerHTML = "20°C|13°C";
-
-  let temperature5day = document.querySelector("#temp-5day");
-  temperature5day.innerHTML = "20°C|13°C";
+  let feelsLike = document.querySelector("#feels-like");
+  let feelsLikeC = Math.round(feel);
+  feelsLike.innerHTML = feelsLikeC + "°C";
 }
+
 let celsiusButton = document.querySelector("#Celsius-button");
 celsiusButton.addEventListener("click", changeTemptoCelsius);
 
@@ -218,7 +202,5 @@ let findButton = document.querySelector("#find-me");
 findButton.addEventListener("click", findMe);
 
 let celsiusTemperature = null;
+let feel = null;
 searchCity("London");
-
-//weather forecast
-//unit conversion
